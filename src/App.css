@@ -1,11 +1,14 @@
 .app-container {
   text-align: center;
-  min-height: 100vh;
   min-width: 100vw;
   position: absolute;
-  top: 50%;
+  top: 30%;
 }
 
 .matrix-container {
-  margin-top: 2%;
+  margin: 2% 0px;
+}
+
+.file-upload {
+  max-width: 164px;
 }

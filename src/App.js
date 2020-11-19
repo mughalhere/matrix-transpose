@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
 
 // ----- UTILS ----- //
-import { transpose } from './utils'
+import { transpose, processData } from './utils'
 
 // ----- STYLES ----- //
 import './App.css'
+
+// ----- Read CSV File _____ //
+import * as XLSX from 'xlsx';
 
 const App = props => {
   const [state, setState] = useState({ matrix: [] })
@@ -37,6 +40,20 @@ const App = props => {
     }
   }
 
+  const handleFileUpload = e => {
+    const file = e.target.files[0]
+    const reader = new FileReader()
+    reader.onload = (evt) => {
+      const bstr = evt.target.result
+      const wb = XLSX.read(bstr, { type: 'binary' })
+      const wsname = wb.SheetNames[0]
+      const ws = wb.Sheets[wsname]
+      const data = XLSX.utils.sheet_to_csv(ws, { RS: "|" })
+      setState(s => ({ ...s, matrix: processData(data) }))
+    }
+    reader.readAsBinaryString(file)
+  }
+
   return (
     <div className='app-container center-align'>
       <form onSubmit={handleSubmit}>
@@ -47,15 +64,18 @@ const App = props => {
           n: <input type="text" name="n" value={n} onChange={handleChange} />
         </label>
         <br />
+        <br />
         <input type="submit" value="Create Transpose" />
+        <p> or </p>
+        <input className='file-upload' type="file" accept=".csv" onChange={handleFileUpload} />
       </form>
       {!!matrix.length && <div className='matrix-container'>
         Matrix:
         {matrix.map((_, m) =>
-          <div key={m}>
-            {_.map((_, n) => <input key={n} value={matrix[m][n]} onChange={event => handleMatrixChange(event, m, n)} />)}
-          </div>
-        )}
+        <div key={m}>
+          {_.map((_, n) => <input key={n} value={matrix[m][n]} onChange={event => handleMatrixChange(event, m, n)} />)}
+        </div>
+      )}
         <button onClick={handleTranspose}>Transpose</button>
       </div>}
     </div>
