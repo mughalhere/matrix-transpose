@@ -1,0 +1,1 @@
+export const transpose = (matrix) => matrix.reduce(($, row) => row.map((_, i) => [...($[i] || []), row[i]]), [])

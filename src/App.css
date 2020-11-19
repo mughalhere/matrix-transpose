@@ -1,0 +1,11 @@
+.app-container {
+  text-align: center;
+  min-height: 100vh;
+  min-width: 100vw;
+  position: absolute;
+  top: 50%;
+}
+
+.matrix-container {
+  margin-top: 2%;
+}
